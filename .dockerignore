@@ -1,0 +1,26 @@
+# 构建镜像时排除以下内容，避免把本地依赖、密钥、Git 历史打进镜像
+node_modules
+npm-debug.log
+
+# 密钥类文件 —— 尤其重要：.env 绝不能进入镜像
+.env
+.env.*
+!.env.example
+
+.git
+.gitignore
+
+# 编排与构建文件无需进入运行时镜像
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# 其他无关内容
+coverage
+.nyc_output
+*.log
+.DS_Store
+dist
+build
+.vscode
+.idea

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker -v)",
+      "Bash(node --check src/config/db.js)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('package.json','utf8'\\)\\); console.log\\('✅ package.json 是合法 JSON'\\)\")",
+      "WebSearch",
+      "Bash(node -e ' *)"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+# =====================================================================
+# DeepSeek-SaaS-Starter — Docker Compose 编排
+#
+# 常用命令：
+#   docker compose up -d --build    # 构建并后台启动
+#   docker compose down             # 停止并移除容器
+#   docker compose logs -f api      # 跟踪服务日志
+#
+# 说明：MongoDB 使用 Atlas 云托管（MONGODB_URI 指向云端），
+#       因此本文件只编排 Node 服务，不在本地另起 mongo 容器。
+# =====================================================================
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner            # 使用 Dockerfile 中多阶段构建的第二个阶段
+    image: deepseek-saas-starter:latest
+    container_name: deepseek-saas-api
+    restart: unless-stopped
+
+    # 从 .env 注入全部配置（配置驱动：所有密钥/连接串/阈值都来自环境变量）
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+
+    # 端口映射：默认 3000，可用 .env 中的 PORT 覆盖
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+
+    networks:
+      - saas-network
+
+    # TODO: 生产环境建议开启资源限制，防止单个容器失控拖垮宿主机
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "1.0"
+    #       memory: 512M
+
+networks:
+  saas-network:
+    driver: bridge
